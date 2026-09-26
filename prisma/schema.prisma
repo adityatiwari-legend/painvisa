@@ -1,0 +1,238 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  ADMIN
+  VIEWER
+}
+
+enum DocumentType {
+  THUMB
+  PASSPORT
+  AADHAAR
+}
+
+enum ApplicationStatus {
+  DRAFT
+  SUBMITTED
+  DOCUMENTS_UNDER_REVIEW
+  APPOINTMENT_PENDING
+  APPOINTMENT_CONFIRMED
+  PROCESSING
+  ADDITIONAL_DOCUMENTS_REQUIRED
+  READY_FOR_COLLECTION
+  COMPLETED
+  CANCELLED
+}
+
+enum AnnouncementSeverity {
+  INFO
+  WARNING
+  URGENT
+}
+
+model User {
+  id                 String     @id @default(cuid())
+  email              String     @unique
+  passwordHash       String
+  name               String
+  role               Role       @default(ADMIN)
+  mustChangePassword Boolean    @default(false)
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  auditLogs          AuditLog[]
+}
+
+model Applicant {
+  id              String                    @id @default(cuid())
+  referenceNumber String                    @unique
+  name            String
+  email           String
+  phone           String
+  dateOfBirth     DateTime?
+  passportNumber  String?
+  nationality     String                    @default("Indian")
+  visaType        String                    @default("SCHENGEN")
+  visaCategory    String                    @default("Tourist Visa")
+  centreName      String                    @default("New Delhi")
+  status          ApplicationStatus         @default(SUBMITTED)
+  consentGiven    Boolean                   @default(true)
+  notes           String?
+  createdAt       DateTime                  @default(now())
+  updatedAt       DateTime                  @updatedAt
+  documents       ApplicantDocument[]
+  statusHistory   ApplicationStatusHistory[]
+
+  @@index([referenceNumber])
+  @@index([email])
+  @@index([status])
+}
+
+model ApplicantDocument {
+  id           String       @id @default(cuid())
+  applicantId  String
+  type         DocumentType
+  originalName String
+  storedName   String
+  mimeType     String
+  size         Int
+  storagePath  String
+  createdAt    DateTime     @default(now())
+  applicant    Applicant    @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+
+  @@index([applicantId])
+}
+
+model ApplicationStatusHistory {
+  id          String            @id @default(cuid())
+  applicantId String
+  oldStatus   ApplicationStatus?
+  newStatus   ApplicationStatus
+  changedBy   String            @default("SYSTEM")
+  note        String?
+  createdAt   DateTime          @default(now())
+  applicant   Applicant         @relation(fields: [applicantId], references: [id], onDelete: Cascade)
+
+  @@index([applicantId])
+}
+
+model Centre {
+  id                     String   @id @default(cuid())
+  code                   String   @unique
+  name                   String
+  country                String   @default("India")
+  address                String
+  submissionHours        String
+  passportCollectionHours String
+  phone                  String
+  email                  String
+  mapUrl                 String?
+  isActive               Boolean  @default(true)
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+}
+
+model VisaType {
+  id                  String         @id @default(cuid())
+  code                String         @unique
+  name                String
+  tagline             String?
+  maxStay             String
+  overview            String
+  photoSpecifications String
+  processingTime      String
+  jurisdictionInfo    String?
+  formDownloadUrl     String?
+  isActive            Boolean        @default(true)
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+  categories          VisaCategory[]
+}
+
+model VisaCategory {
+  id                String    @id @default(cuid())
+  visaTypeId        String
+  name              String
+  slug              String
+  description       String
+  documentsRequired String
+  standardFee       Float     @default(9599)
+  childFee          Float?    @default(4799)
+  blsServiceFee     Float     @default(1802)
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  visaType          VisaType  @relation(fields: [visaTypeId], references: [id], onDelete: Cascade)
+
+  @@index([visaTypeId])
+}
+
+model AdditionalService {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  price       Float
+  currency    String   @default("INR")
+  isOptional  Boolean  @default(true)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Holiday {
+  id          String   @id @default(cuid())
+  country     String   @default("India")
+  year        Int      @default(2026)
+  date        DateTime
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model FAQ {
+  id        String   @id @default(cuid())
+  category  String   @default("General")
+  question  String
+  answer    String
+  sortOrder Int      @default(0)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model UsefulLink {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  url         String
+  category    String   @default("Official")
+  sortOrder   Int      @default(0)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Announcement {
+  id          String               @id @default(cuid())
+  title       String
+  message     String
+  severity    AnnouncementSeverity @default(INFO)
+  isPublished Boolean              @default(true)
+  startDate   DateTime?
+  endDate     DateTime?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+}
+
+model SiteSetting {
+  key         String   @id
+  value       String
+  description String?
+  updatedAt   DateTime @updatedAt
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  adminId    String?
+  adminEmail String?
+  action     String
+  entityType String
+  entityId   String?
+  metadata   String?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+  admin      User?    @relation(fields: [adminId], references: [id], onDelete: SetNull)
+
+  @@index([adminId])
+  @@index([entityType, entityId])
+  @@index([action])
+}
