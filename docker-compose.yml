@@ -1,16 +1,55 @@
 services:
   db:
     image: postgres:16-alpine
-    container_name: spainvisa_postgres
+    container_name: painvisa_postgres
     restart: always
     environment:
-      POSTGRES_DB: spainvisa_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5434:5432"
+      POSTGRES_DB: ${POSTGRES_DB:-spainvisa_db}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres_secure_2026}
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - painvisa_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres} -d ${POSTGRES_DB:-spainvisa_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: painvisa_app
+    restart: always
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-postgres}:${POSTGRES_PASSWORD:-postgres_secure_2026}@db:5432/${POSTGRES_DB:-spainvisa_db}?schema=public
+      AUTH_SECRET: ${AUTH_SECRET}
+      STORAGE_PATH: /app/storage
+      MAX_UPLOAD_SIZE_MB: ${MAX_UPLOAD_SIZE_MB:-5}
+      NEXT_PUBLIC_APP_URL: ${NEXT_PUBLIC_APP_URL}
+      BLS_APPOINTMENT_URL: ${BLS_APPOINTMENT_URL:-https://india.blsspainvisa.com/book_appointment.php}
+      BLS_REPRINT_URL: ${BLS_REPRINT_URL:-https://india.blsspainvisa.com/reprint_appointment.php}
+      BLS_CANCEL_URL: ${BLS_CANCEL_URL:-https://india.blsspainvisa.com/cancel_appointment.php}
+      BLS_TRACKING_URL: ${BLS_TRACKING_URL:-https://india.blsspainvisa.com/track_application.php}
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-admin@spainvisa-portal.com}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-AdminSpain2026!Secure}
+      ADMIN_NAME: ${ADMIN_NAME:-Super Administrator}
+    volumes:
+      - ./storage:/app/storage
+    networks:
+      - painvisa_network
 
 volumes:
   postgres_data:
+    driver: local
+
+networks:
+  painvisa_network:
+    driver: bridge
