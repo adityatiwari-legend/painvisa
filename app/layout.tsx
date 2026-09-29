@@ -15,19 +15,26 @@ export const viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "Spain Visa Application - India | Official Services Portal",
-  description:
-    "Official application information and outsourced logistics portal for applicants applying for Schengen and National visas to Spain from India, Nepal, and Sri Lanka.",
+  title: {
+    default: "BLS Biometric | Spain Visa Application",
+    template: "%s | BLS Biometric",
+  },
+  description: "Spain visa application information and services.",
   keywords: [
+    "BLS Biometric",
     "Spain Visa India",
     "Schengen Visa",
     "National Visa Spain",
     "Spain Visa Application Centre",
-    "BLS Spain Visa",
     "Visa appointment Spain",
     "Track Spain Visa application",
   ],
-  authors: [{ name: "Spain Visa Portal" }],
+  authors: [{ name: "BLS Biometric" }],
+  openGraph: {
+    title: "BLS Biometric | Spain Visa Application",
+    siteName: "BLS Biometric",
+    description: "Spain visa application information and services.",
+  },
 };
 
 export default function RootLayout({

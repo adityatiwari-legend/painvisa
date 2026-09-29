@@ -30,6 +30,7 @@ export default function HomePage() {
   const [appointmentUrl, setAppointmentUrl] = useState("https://india.blsspainvisa.com/book_appointment.php");
 
   useEffect(() => {
+    document.title = "BLS Biometric | Spain Visa Application";
     fetch("/api/content/settings")
       .then((res) => res.json())
       .then((data) => {
@@ -77,7 +78,7 @@ export default function HomePage() {
                 </h1>
 
                 <p className="text-base sm:text-lg text-neutral-300 max-w-2xl font-normal leading-relaxed">
-                  Official information and logistics facilitation for travelers, students, and professionals applying for a visa to the Kingdom of Spain.
+                  Welcome to BLS Biometric. Official information and logistics services for applicants applying for a visa to Spain across India, Nepal, and Sri Lanka.
                 </p>
 
                 {/* Primary Action Buttons */}

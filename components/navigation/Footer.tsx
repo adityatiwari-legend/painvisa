@@ -11,6 +11,7 @@ import {
   Phone,
   Building2,
   CheckCircle2,
+  Fingerprint,
 } from "lucide-react";
 
 export function Footer() {
@@ -35,25 +36,21 @@ export function Footer() {
           {/* Brand info */}
           <div className="lg:col-span-2 space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-md bg-neutral-800 flex items-center justify-between p-1.5 border border-neutral-700">
-                <div className="w-full h-full flex flex-col justify-between py-0.5">
-                  <div className="h-1 w-full bg-[#C60B1E]" />
-                  <div className="h-2 w-full bg-[#FFC400]" />
-                  <div className="h-1 w-full bg-[#C60B1E]" />
-                </div>
+              <div className="w-10 h-10 rounded-xl bg-neutral-850 flex items-center justify-center p-2 border border-neutral-700">
+                <Fingerprint className="w-5 h-5 text-[#C79A2B]" />
               </div>
               <div>
-                <span className="font-extrabold text-lg text-white tracking-tight">
-                  BLS SPAIN VISA
+                <span className="font-extrabold text-lg text-white tracking-tight block">
+                  BLS Biometric
                 </span>
-                <span className="text-[10px] text-[#C79A2B] block uppercase tracking-widest font-semibold">
-                  India • Nepal • Sri Lanka
+                <span className="text-[11px] text-[#C79A2B] block tracking-wide font-medium">
+                  Spain Visa Application Services
                 </span>
               </div>
             </div>
 
             <p className="text-xs text-neutral-400 leading-relaxed pr-6">
-              Authorized outsourced administrative and logistics service partner facilitating Schengen (Short Stay) and National (Long Stay) visa submissions to the Embassy and Consulates General of Spain.
+              BLS Biometric facilitates Schengen (Short Stay) and National (Long Stay) visa documentation and biometric appointment scheduling for Spain across India, Nepal, and Sri Lanka.
             </p>
 
             <div className="pt-2 space-y-2 text-xs text-neutral-300">
@@ -193,7 +190,7 @@ export function Footer() {
 
         {/* Bottom copyright */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-neutral-400 gap-4">
-          <p>© {new Date().getFullYear()} BLS Spain Visa Services Prototype. All rights reserved.</p>
+          <p>© 2026 BLS Biometric. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <span className="text-[11px] text-neutral-500">
               Compliant with Consular Processing Standards

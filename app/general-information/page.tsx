@@ -68,6 +68,7 @@ function GeneralInformationContent() {
   const [openFaqIds, setOpenFaqIds] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
+    document.title = "General Information | BLS Biometric";
     // Fetch all content
     Promise.all([
       fetch("/api/content/centres").then((res) => res.json()),
@@ -207,6 +208,38 @@ function GeneralInformationContent() {
           {/* ======================================================== */}
           {activeTab === "centres" && (
             <div className="space-y-8 animate-in fade-in duration-200">
+              {/* Contact BLS Biometric Assistance Card */}
+              <div className="bg-white rounded-3xl p-6 sm:p-8 border border-[#E5E5E5] shadow-xs flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+                <div className="space-y-1.5">
+                  <div className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-[#C79A2B]">
+                    <span>Applicant Support</span>
+                  </div>
+                  <h2 className="text-2xl font-extrabold text-[#333638]">
+                    Contact BLS Biometric
+                  </h2>
+                  <p className="text-xs sm:text-sm text-neutral-600 max-w-xl leading-relaxed">
+                    Get in touch with BLS Biometric for assistance with application preparation, submission procedures, document queries, and center appointments across India, Nepal, and Sri Lanka.
+                  </p>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  <a
+                    href="mailto:info.india@blsspainvisa.com"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#333638] text-white text-xs font-semibold hover:bg-neutral-800 transition-colors shadow-xs"
+                  >
+                    <Mail className="w-4 h-4 text-[#C79A2B]" />
+                    <span>Email Support</span>
+                  </a>
+                  <a
+                    href="tel:+911206641000"
+                    className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#FAF5EA] text-[#785918] border border-[#E2CCA1] text-xs font-semibold hover:bg-[#F3EAD3] transition-colors"
+                  >
+                    <Phone className="w-4 h-4 text-[#C79A2B]" />
+                    <span>+91 120 6641000</span>
+                  </a>
+                </div>
+              </div>
+
               {/* Filter & Search Bar */}
               <div className="bg-white p-5 rounded-2xl border border-[#E5E5E5] shadow-xs flex flex-col md:flex-row items-center justify-between gap-4">
                 <div className="flex items-center gap-2 overflow-x-auto w-full md:w-auto">

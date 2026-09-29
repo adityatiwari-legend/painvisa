@@ -15,6 +15,7 @@ import {
   ExternalLink,
   Shield,
   ArrowRight,
+  Fingerprint,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -126,14 +127,8 @@ export function Navbar() {
         <div className="flex items-center justify-between h-20">
           {/* Logo / Brand Area */}
           <Link href="/" className="flex items-center gap-3 group">
-            <div className="w-11 h-11 rounded-lg bg-[#333638] flex items-center justify-between p-2 shadow-inner border border-neutral-600/40 group-hover:border-[#C79A2B] transition-colors">
-              <div className="w-full h-full flex flex-col justify-between py-0.5">
-                <div className="h-1.5 w-full bg-[#C60B1E] rounded-xs" />
-                <div className="h-3 w-full bg-[#FFC400] rounded-xs flex items-center justify-center">
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#C79A2B]" />
-                </div>
-                <div className="h-1.5 w-full bg-[#C60B1E] rounded-xs" />
-              </div>
+            <div className="w-11 h-11 rounded-xl bg-[#333638] flex items-center justify-center p-2 shadow-xs border border-neutral-700 group-hover:border-[#C79A2B] transition-colors">
+              <Fingerprint className="w-6 h-6 text-[#C79A2B]" />
             </div>
 
             <div>
@@ -141,12 +136,12 @@ export function Navbar() {
                 <span className="font-extrabold text-xl tracking-tight text-[#333638]">
                   BLS
                 </span>
-                <span className="text-xs uppercase font-bold tracking-widest text-[#C79A2B] bg-[#FAF5EA] px-1.5 py-0.5 rounded border border-[#E2CCA1]">
-                  SPAIN VISA
+                <span className="font-extrabold text-xl tracking-tight text-[#C79A2B]">
+                  Biometric
                 </span>
               </div>
-              <p className="text-[11px] text-[#71717A] tracking-tight font-medium">
-                Official Logistics Partner Portal
+              <p className="text-[10px] text-neutral-500 tracking-wider font-semibold uppercase">
+                Spain Visa Application Services
               </p>
             </div>
           </Link>

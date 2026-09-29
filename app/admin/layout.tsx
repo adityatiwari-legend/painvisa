@@ -20,6 +20,10 @@ export default function AdminRootLayout({
   const isLoginPage = pathname === "/admin/login";
 
   useEffect(() => {
+    document.title = "BLS Biometric Admin";
+  }, []);
+
+  useEffect(() => {
     if (isLoginPage) {
       setLoading(false);
       return;

@@ -27,6 +27,10 @@ export default function TrackApplicationPage() {
   const [result, setResult] = useState<any | null>(null);
   const [officialUrl, setOfficialUrl] = useState<string | null>(null);
 
+  React.useEffect(() => {
+    document.title = "Track Application | BLS Biometric";
+  }, []);
+
   const handleTrack = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);

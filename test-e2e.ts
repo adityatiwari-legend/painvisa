@@ -99,6 +99,7 @@ async function runEndToEndTests() {
 
   const setCookieHeader = loginRes.headers.get("set-cookie");
   assert(setCookieHeader !== null && setCookieHeader.includes("spainvisa_admin_session"), "HTTP-only secure cookie received");
+  if (!setCookieHeader) throw new Error("Missing cookie header");
 
   // Extract session cookie for subsequent authenticated admin calls
   const cookieString = setCookieHeader.split(";")[0];

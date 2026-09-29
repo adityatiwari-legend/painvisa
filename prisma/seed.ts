@@ -566,6 +566,7 @@ async function main() {
     { key: "bls_tracking_url", value: "https://india.blsspainvisa.com/track_application.php", description: "Official BLS Embassy visa tracking external portal" },
     { key: "contact_email", value: "info.india@blsspainvisa.com", description: "General support email" },
     { key: "contact_phone", value: "+91 120 6641000", description: "Helpline phone number" },
+    { key: "portal_brand_name", value: "BLS Biometric", description: "Official website brand name" },
     { key: "site_disclaimer", value: "Prototype / Demonstration Visa Application Service Portal. Not an official Embassy website.", description: "Legal status indicator" },
   ];
 

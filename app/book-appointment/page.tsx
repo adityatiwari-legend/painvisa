@@ -25,6 +25,7 @@ export default function BookAppointmentPage() {
   });
 
   useEffect(() => {
+    document.title = "Book Appointment | BLS Biometric";
     fetch("/api/content/settings")
       .then((res) => res.json())
       .then((data) => {

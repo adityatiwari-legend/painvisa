@@ -122,6 +122,7 @@ function VisaTypesContent() {
   const [nationalSearch, setNationalSearch] = useState("");
 
   useEffect(() => {
+    document.title = "Visa Types | BLS Biometric";
     fetch("/api/content/visa-types")
       .then((res) => res.json())
       .then((data) => {

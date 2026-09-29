@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Mail, ShieldAlert, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import { Lock, Mail, ShieldAlert, ArrowRight, CheckCircle2, AlertCircle, Fingerprint } from "lucide-react";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -10,6 +10,10 @@ export default function AdminLoginPage() {
   const [password, setPassword] = useState("AdminSpain2026!Secure");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  React.useEffect(() => {
+    document.title = "BLS Biometric Admin";
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,19 +45,15 @@ export default function AdminLoginPage() {
       <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl border border-neutral-700/50 overflow-hidden">
         {/* Header */}
         <div className="bg-[#333638] text-white p-8 text-center space-y-3 border-b border-neutral-700">
-          <div className="w-12 h-12 rounded-xl bg-neutral-800 border border-neutral-600 flex items-center justify-between p-2 mx-auto">
-            <div className="w-full h-full flex flex-col justify-between py-0.5">
-              <div className="h-1.5 w-full bg-[#C60B1E]" />
-              <div className="h-3 w-full bg-[#FFC400]" />
-              <div className="h-1.5 w-full bg-[#C60B1E]" />
-            </div>
+          <div className="w-12 h-12 rounded-2xl bg-neutral-800 border border-neutral-600 flex items-center justify-center p-2 mx-auto">
+            <Fingerprint className="w-7 h-7 text-[#C79A2B]" />
           </div>
           <div>
             <span className="text-[11px] font-bold uppercase tracking-widest text-[#C79A2B] block">
-              Consular Processing Network
+              Secure Administration Portal
             </span>
-            <h1 className="text-xl font-extrabold text-white tracking-tight">
-              Spain Visa Administrative Portal
+            <h1 className="text-2xl font-extrabold text-white tracking-tight mt-1">
+              BLS Biometric Admin
             </h1>
           </div>
         </div>

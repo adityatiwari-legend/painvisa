@@ -92,6 +92,7 @@ export default function ApplyPage() {
 
   // Load non-sensitive progress from sessionStorage on mount
   useEffect(() => {
+    document.title = "Apply for Visa | BLS Biometric";
     try {
       const saved = sessionStorage.getItem("spainvisa_form_progress");
       if (saved) {
@@ -262,13 +263,13 @@ export default function ApplyPage() {
           {/* Header */}
           <div className="text-center space-y-2 no-print">
             <span className="text-xs font-bold uppercase tracking-widest text-[#C79A2B]">
-              Consular Application Wizard
+              Welcome to BLS Biometric
             </span>
             <h1 className="text-3xl sm:text-4xl font-extrabold text-[#333638]">
-              Spain Visa Applicant Registration
+              Start Your Application with BLS Biometric
             </h1>
             <p className="text-xs sm:text-sm text-neutral-600 max-w-xl mx-auto">
-              Register your personal information and securely capture required biometric and identity photographs.
+              Register your personal information and securely capture required biometric and identity photographs for your Spain visa.
             </p>
           </div>
 
@@ -991,7 +992,7 @@ export default function ApplyPage() {
                   Application Submitted Successfully
                 </h2>
                 <p className="text-xs sm:text-sm text-neutral-600 max-w-lg mx-auto">
-                  Your visa application and biometric documents have been safely received and registered into our processing queue.
+                  Your application has been successfully submitted through BLS Biometric. Your visa application and biometric documents have been safely received and registered into our processing queue.
                 </p>
               </div>
 
@@ -1017,8 +1018,12 @@ export default function ApplyPage() {
 
               {/* Printable Application Receipt Summary */}
               <div className="p-6 bg-neutral-50 rounded-2xl border border-neutral-200 text-xs space-y-3 print:border-none print:p-0">
-                <div className="font-bold text-sm text-[#333638] pb-2 border-b border-neutral-200">
-                  Application Summary & Verification Receipt
+                <div className="flex items-center justify-between pb-3 border-b border-neutral-200">
+                  <div className="flex items-center gap-2">
+                    <span className="font-extrabold text-base text-[#333638]">BLS Biometric</span>
+                    <span className="text-[10px] text-neutral-500 uppercase tracking-wider font-semibold">| Spain Visa Application Receipt</span>
+                  </div>
+                  <span className="text-[11px] text-neutral-500 font-mono">{formatDate(new Date())}</span>
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   <div>
@@ -1045,6 +1050,10 @@ export default function ApplyPage() {
                     <span className="text-neutral-500 block text-[11px]">Initial Status</span>
                     <span className="font-bold text-blue-700">SUBMITTED (In Review)</span>
                   </div>
+                </div>
+
+                <div className="pt-3 border-t border-neutral-200 text-center text-[10px] text-neutral-500">
+                  © 2026 BLS Biometric. All rights reserved.
                 </div>
               </div>
 

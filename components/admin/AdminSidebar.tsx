@@ -18,6 +18,7 @@ import {
   ExternalLink,
   ChevronRight,
   ShieldCheck,
+  Fingerprint,
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -57,19 +58,15 @@ export function AdminSidebar({ userRole, userName, userEmail }: AdminSidebarProp
         {/* Brand header */}
         <div className="p-5 border-b border-neutral-700/80 flex items-center justify-between">
           <Link href="/admin/dashboard" className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-neutral-800 flex items-center justify-between p-1.5 border border-neutral-600">
-              <div className="w-full h-full flex flex-col justify-between py-0.5">
-                <div className="h-1 w-full bg-[#C60B1E]" />
-                <div className="h-2 w-full bg-[#FFC400]" />
-                <div className="h-1 w-full bg-[#C60B1E]" />
-              </div>
+            <div className="w-9 h-9 rounded-xl bg-neutral-800 flex items-center justify-center p-1.5 border border-neutral-600">
+              <Fingerprint className="w-5 h-5 text-[#C79A2B]" />
             </div>
             <div>
               <span className="font-extrabold text-sm text-white block tracking-tight">
-                SPAIN VISA ADMIN
+                BLS Biometric
               </span>
               <span className="text-[10px] text-[#C79A2B] uppercase tracking-wider font-semibold">
-                Control Management
+                Admin Panel
               </span>
             </div>
           </Link>
