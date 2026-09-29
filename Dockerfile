@@ -14,6 +14,9 @@ RUN npm ci
 # Copy all source files
 COPY . .
 
+ENV NODE_OPTIONS="--max-old-space-size=1024"
+ENV NEXT_TELEMETRY_DISABLED=1
+
 # Generate Prisma Client and build Next.js application
 RUN npx prisma generate
 RUN npm run build
