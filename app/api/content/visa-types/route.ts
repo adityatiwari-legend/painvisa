@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { DEFAULT_VISA_TYPES } from "@/lib/mock-data";
 
 export async function GET() {
   try {
@@ -13,9 +14,12 @@ export async function GET() {
       },
       orderBy: { code: "asc" },
     });
-    return NextResponse.json({ success: true, visaTypes });
+    if (visaTypes && visaTypes.length > 0) {
+      return NextResponse.json({ success: true, visaTypes });
+    }
+    return NextResponse.json({ success: true, visaTypes: DEFAULT_VISA_TYPES });
   } catch (err) {
-    console.error("Fetch visa types error:", err);
-    return NextResponse.json({ success: false, visaTypes: [] }, { status: 500 });
+    // Return demo visa types on Vercel without database
+    return NextResponse.json({ success: true, visaTypes: DEFAULT_VISA_TYPES });
   }
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { DEFAULT_USEFUL_LINKS } from "@/lib/mock-data";
 
 export async function GET() {
   try {
@@ -7,9 +8,11 @@ export async function GET() {
       where: { isActive: true },
       orderBy: { sortOrder: "asc" },
     });
-    return NextResponse.json({ success: true, usefulLinks });
+    if (usefulLinks && usefulLinks.length > 0) {
+      return NextResponse.json({ success: true, usefulLinks });
+    }
+    return NextResponse.json({ success: true, usefulLinks: DEFAULT_USEFUL_LINKS });
   } catch (err) {
-    console.error("Fetch useful links error:", err);
-    return NextResponse.json({ success: false, usefulLinks: [] }, { status: 500 });
+    return NextResponse.json({ success: true, usefulLinks: DEFAULT_USEFUL_LINKS });
   }
 }

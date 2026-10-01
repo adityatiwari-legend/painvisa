@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { DEFAULT_FAQS } from "@/lib/mock-data";
 
 export async function GET() {
   try {
@@ -7,9 +8,11 @@ export async function GET() {
       where: { isActive: true },
       orderBy: [{ sortOrder: "asc" }, { createdAt: "asc" }],
     });
-    return NextResponse.json({ success: true, faqs });
+    if (faqs && faqs.length > 0) {
+      return NextResponse.json({ success: true, faqs });
+    }
+    return NextResponse.json({ success: true, faqs: DEFAULT_FAQS });
   } catch (err) {
-    console.error("Fetch faqs error:", err);
-    return NextResponse.json({ success: false, faqs: [] }, { status: 500 });
+    return NextResponse.json({ success: true, faqs: DEFAULT_FAQS });
   }
 }

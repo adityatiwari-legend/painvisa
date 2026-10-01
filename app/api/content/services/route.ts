@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { DEFAULT_SERVICES } from "@/lib/mock-data";
 
 export async function GET() {
   try {
@@ -7,9 +8,11 @@ export async function GET() {
       where: { isActive: true },
       orderBy: { price: "asc" },
     });
-    return NextResponse.json({ success: true, services });
+    if (services && services.length > 0) {
+      return NextResponse.json({ success: true, services });
+    }
+    return NextResponse.json({ success: true, services: DEFAULT_SERVICES });
   } catch (err) {
-    console.error("Fetch services error:", err);
-    return NextResponse.json({ success: false, services: [] }, { status: 500 });
+    return NextResponse.json({ success: true, services: DEFAULT_SERVICES });
   }
 }

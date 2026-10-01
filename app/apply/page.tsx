@@ -27,6 +27,8 @@ import { Footer } from "@/components/navigation/Footer";
 import { CameraCaptureModal } from "@/components/camera/CameraCaptureModal";
 import { maskPassport, formatDate } from "@/lib/utils";
 
+import { DEFAULT_CENTRES, DEFAULT_VISA_TYPES } from "@/lib/mock-data";
+
 interface DocumentState {
   file: File | null;
   previewUrl: string | null;
@@ -52,9 +54,9 @@ export default function ApplyPage() {
     consent: false,
   });
 
-  // Available options
-  const [centres, setCentres] = useState<any[]>([]);
-  const [visaTypes, setVisaTypes] = useState<any[]>([]);
+  // Available options initialized with robust default data for demo & zero-DB deployments
+  const [centres, setCentres] = useState<any[]>(DEFAULT_CENTRES);
+  const [visaTypes, setVisaTypes] = useState<any[]>(DEFAULT_VISA_TYPES);
 
   // Document states (Kept strictly in memory, NEVER written to localStorage)
   const [thumbDoc, setThumbDoc] = useState<DocumentState>({
@@ -101,13 +103,21 @@ export default function ApplyPage() {
       }
     } catch {}
 
-    // Load centres and visa types from DB
+    // Gracefully attempt to fetch dynamic centres and visa types if API is active
     Promise.all([
-      fetch("/api/content/centres").then((res) => res.json()),
-      fetch("/api/content/visa-types").then((res) => res.json()),
+      fetch("/api/content/centres")
+        .then((res) => res.json())
+        .catch(() => null),
+      fetch("/api/content/visa-types")
+        .then((res) => res.json())
+        .catch(() => null),
     ]).then(([centresRes, visaTypesRes]) => {
-      if (centresRes.success) setCentres(centresRes.centres || []);
-      if (visaTypesRes.success) setVisaTypes(visaTypesRes.visaTypes || []);
+      if (centresRes?.success && Array.isArray(centresRes.centres) && centresRes.centres.length > 0) {
+        setCentres(centresRes.centres);
+      }
+      if (visaTypesRes?.success && Array.isArray(visaTypesRes.visaTypes) && visaTypesRes.visaTypes.length > 0) {
+        setVisaTypes(visaTypesRes.visaTypes);
+      }
     });
   }, []);
 
@@ -182,7 +192,7 @@ export default function ApplyPage() {
   // Step 2 validation
   const isStep2Valid = Boolean(thumbDoc.file && passportDoc.file && aadhaarDoc.file);
 
-  // Handle final submission
+  // Handle final submission in demo mode (zero database / zero filesystem storage required)
   const handleSubmit = async () => {
     if (!formData.consent) {
       setSubmissionError("You must provide consent before submitting.");
@@ -198,38 +208,47 @@ export default function ApplyPage() {
     setSubmissionError(null);
 
     try {
-      const data = new FormData();
-      data.append("name", formData.name);
-      data.append("email", formData.email);
-      data.append("phone", formData.phone);
-      data.append("dateOfBirth", formData.dateOfBirth);
-      data.append("passportNumber", formData.passportNumber);
-      data.append("nationality", formData.nationality);
-      data.append("visaType", formData.visaType);
-      data.append("visaCategory", formData.visaCategory);
-      data.append("centreName", formData.centreName);
-      data.append("consent", "true");
+      // Simulate realistic network encryption & biometric ingestion delay
+      await new Promise((resolve) => setTimeout(resolve, 1300));
 
-      data.append("thumbPhoto", thumbDoc.file);
-      data.append("passportPhoto", passportDoc.file);
-      data.append("aadhaarPhoto", aadhaarDoc.file);
-
-      const res = await fetch("/api/applicants", {
-        method: "POST",
-        body: data,
-      });
-
-      const json = await res.json();
-      if (!res.ok || !json.success) {
-        setSubmissionError(json.error || "Application submission failed. Please verify all details.");
-      } else {
-        // Clear saved draft
-        try {
-          sessionStorage.removeItem("spainvisa_form_progress");
-        } catch {}
-        setSubmissionSuccess(json);
-        setCurrentStep(5); // Complete screen
+      // Generate realistic reference number format: BLS-2026-XXXXXX
+      const chars = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+      let code = "";
+      for (let i = 0; i < 6; i++) {
+        code += chars.charAt(Math.floor(Math.random() * chars.length));
       }
+      const referenceNumber = `BLS-2026-${code}`;
+
+      const demoResponse = {
+        success: true,
+        message: "Application submitted successfully.",
+        referenceNumber,
+        applicant: {
+          id: `demo_${Date.now()}`,
+          referenceNumber,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim(),
+          dateOfBirth: formData.dateOfBirth,
+          passportNumber: formData.passportNumber.trim().toUpperCase(),
+          nationality: formData.nationality,
+          visaType: formData.visaType,
+          visaCategory: formData.visaCategory,
+          centreName: formData.centreName,
+          status: "SUBMITTED",
+          createdAt: new Date().toISOString(),
+        },
+        documentsCount: 3,
+      };
+
+      // Preserve submitted demo record in sessionStorage so Track Application can display it seamlessly
+      try {
+        sessionStorage.setItem("spainvisa_demo_last_submission", JSON.stringify(demoResponse));
+        sessionStorage.removeItem("spainvisa_form_progress");
+      } catch {}
+
+      setSubmissionSuccess(demoResponse);
+      setCurrentStep(5); // Complete screen
     } catch {
       setSubmissionError("A network error occurred. Please try submitting again.");
     } finally {

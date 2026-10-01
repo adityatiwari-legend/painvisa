@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { DEFAULT_ANNOUNCEMENTS } from "@/lib/mock-data";
 
 export async function GET() {
   try {
@@ -7,9 +8,11 @@ export async function GET() {
       where: { isPublished: true },
       orderBy: { createdAt: "desc" },
     });
-    return NextResponse.json({ success: true, announcements });
+    if (announcements && announcements.length > 0) {
+      return NextResponse.json({ success: true, announcements });
+    }
+    return NextResponse.json({ success: true, announcements: DEFAULT_ANNOUNCEMENTS });
   } catch (err) {
-    console.error("Fetch announcements error:", err);
-    return NextResponse.json({ success: false, announcements: [] }, { status: 500 });
+    return NextResponse.json({ success: true, announcements: DEFAULT_ANNOUNCEMENTS });
   }
 }

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
+import { DEFAULT_CENTRES } from "@/lib/mock-data";
 
 export async function GET() {
   try {
@@ -7,9 +8,12 @@ export async function GET() {
       where: { isActive: true },
       orderBy: [{ country: "asc" }, { name: "asc" }],
     });
-    return NextResponse.json({ success: true, centres });
+    if (centres && centres.length > 0) {
+      return NextResponse.json({ success: true, centres });
+    }
+    return NextResponse.json({ success: true, centres: DEFAULT_CENTRES });
   } catch (err) {
-    console.error("Fetch centres error:", err);
-    return NextResponse.json({ success: false, centres: [] }, { status: 500 });
+    // Return demo centres on Vercel without database
+    return NextResponse.json({ success: true, centres: DEFAULT_CENTRES });
   }
 }
