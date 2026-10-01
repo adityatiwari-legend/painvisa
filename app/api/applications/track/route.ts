@@ -65,7 +65,7 @@ export async function GET(req: NextRequest) {
           status: applicant.status,
           submittedAt: applicant.createdAt,
           updatedAt: applicant.updatedAt,
-          history: applicant.statusHistory.map((h) => ({
+          history: (applicant.statusHistory || []).map((h: any) => ({
             status: h.newStatus,
             note: h.note,
             changedAt: h.createdAt,

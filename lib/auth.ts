@@ -1,8 +1,7 @@
 import { cookies } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
-import { Role } from "@prisma/client";
-import { prisma } from "./db";
+import { Role, prisma } from "./db";
 
 const JWT_SECRET = new TextEncoder().encode(
   process.env.AUTH_SECRET || "f9b4c09d31e9a263884b2c127402685df5b6192138fa0c0bb76e62f592a80695"

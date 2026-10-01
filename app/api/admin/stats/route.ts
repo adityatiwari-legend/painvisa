@@ -59,10 +59,10 @@ export async function GET() {
       }),
     ]);
 
-    const statusCounts = statusGroups.reduce((acc, curr) => {
-      acc[curr.status] = curr._count.id;
+    const statusCounts = statusGroups.reduce((acc: Record<string, number>, curr: any) => {
+      acc[curr.status] = curr._count?.id || 0;
       return acc;
-    }, {} as Record<string, number>);
+    }, {});
 
     return NextResponse.json({
       success: true,
